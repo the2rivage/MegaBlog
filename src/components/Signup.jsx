@@ -5,19 +5,20 @@ import { useDispatch } from "react-redux";
 import authService from "../appwrite/auth";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-export default function Login() {
-  const navigate = useNavigate();
+
+export default function Signup() {  
   const dispatch = useDispatch();
-  const { register, handleSubmit } = useForm();
+  const navigate = useNavigate();
+  const { handleSubmit, register } = useForm();
   const [error, setError] = useState("");
-  const login = async (data) => {
+  const create = async (data) => {
     setError("");
     try {
-      const session = await authService.login(data);
-      if (session) {
+      const sesssion = await authService.createAccount(data);
+      if (sesssion) {
         const userData = await authService.getCurrUser();
         if (userData) dispatch(authLogin(userData));
-        navigate("/"); // go to root page after login
+        navigate("/");
       }
     } catch (error) {
       setError(error.message);
@@ -34,20 +35,28 @@ export default function Login() {
           </span>
         </div>
         <h2 className="text-center text-2xl font-bold leading-tight">
-          Sign in to your account
+          Sign up to create account
         </h2>
         <p className="mt-2 text-center text-base text-black/60">
-          Don&apos;t have any account?&nbsp;
+          Already have an account?&nbsp;
           <Link
-            to="/signup"
+            to="/login"
             className="font-medium text-primary transition-all duration-200 hover:underline"
           >
-            Sign Up
+            Sign In
           </Link>
         </p>
         {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
-        <form onSubmit={handleSubmit(login)} className="mt-8">
+        <form onSubmit={handleSubmit(create)} className="mt-8">
           <div className="space-y-5">
+            <Input
+              label="Full Name: "
+              placeholder="Enter your Full name"
+              type="text"
+              {...register("name", {
+                required: true,
+              })}
+            />
             <Input
               label="Email: "
               placeholder="Enter your email"
@@ -73,7 +82,11 @@ export default function Login() {
                 },
               })}
             />
-            <Button children="Login" type="submit" classname="w-full"/>
+            <Button
+              children="Create Account"
+              type="submit"
+              classname="w-full"
+            />
           </div>
         </form>
       </div>
