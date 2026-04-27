@@ -6,12 +6,13 @@ import authService from "../appwrite/auth";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
-export default function Signup() {  
+export default function Signup() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { handleSubmit, register } = useForm();
   const [error, setError] = useState("");
   const create = async (data) => {
+    // console.log("signup clicked")
     setError("");
     try {
       const sesssion = await authService.createAccount(data);
@@ -76,10 +77,6 @@ export default function Signup() {
               placeholder="Enter your password"
               {...register("password", {
                 required: true,
-                minLength: {
-                  value: 4,
-                  message: "Password must be at least 4 characters",
-                },
               })}
             />
             <Button

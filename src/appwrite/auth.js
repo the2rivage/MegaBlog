@@ -12,27 +12,31 @@ export class AuthService {
   }
   async createAccount({ email, password, name }) {
     try {
-      const userAccount = await this.account.create(
-        ID.unique(),
-        email,
-        password,
-        name,
-      );
+      const userAccount = await this.account.create({
+        userId: ID.unique(),
+        email: email,
+        password: password,
+        name: name,
+      });
       if (userAccount) {
         // call another method
         return this.login({ email, password });
       } else {
         return userAccount;
       }
-    } catch (e) {
-      throw e;
+    } catch (error) {
+      console.log("Appwrite service :: create account error :: ", error);
+      return error;
     }
   }
   async login({ email, password }) {
     try {
-      return await this.account.createEmailPasswordSession(email, password);
-    } catch (e) {
-      throw e;
+      return await this.account.createEmailPasswordSession({
+        email: email,
+        password: password,
+      });
+    } catch (error) {
+      console.log("Appwrite service :: login error :: ", error);
     }
   }
   async getCurrUser() {

@@ -4,11 +4,12 @@ import authService from "./appwrite/auth";
 import { login, logout } from "./store/authSlice";
 import "./App.css";
 import { Header,Footer } from "./components";
-
+import { Outlet } from "react-router-dom";
 function App() {
   const [loading, setLoading] = useState(true); // when page is loading (fetching data from apwrite) , there will show loading icon
   const dispatch = useDispatch();
   useEffect(() => {
+    
     authService
       .getCurrUser()
       .then((userData) => {
@@ -28,7 +29,7 @@ function App() {
         <div className="w-full block">
           <Header/>
           <main>
-            {/* <Outlet/> */}
+            <Outlet/>
           </main>
           <Footer/>
         </div>
